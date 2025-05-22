@@ -17,7 +17,7 @@ async function scrapeAkakce(source, isFile = false) {
     await page.setContent(html, { waitUntil: 'domcontentloaded' });
   } else {
     await page.goto(source, { waitUntil: 'domcontentloaded' });
-    await new Promise(resolve => setTimeout(resolve, 2000)); // 2 saniye bekle
+    await new Promise(resolve => setTimeout(resolve, 7000)); // 7 saniye bekle
   }
 
   // Satıcılar ve fiyatlar (ürün detay sayfası için)
