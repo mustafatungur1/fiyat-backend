@@ -21,12 +21,21 @@ async function scrapeAkakce(source, isFile = false) {
     await page.setContent(html, { waitUntil: 'domcontentloaded' });
   } else {
     await page.goto(source, { waitUntil: 'domcontentloaded' });
-    await new Promise(resolve => setTimeout(resolve, 7000)); // 7 saniye bekle
+    await new Promise(resolve => setTimeout(resolve, 10000)); // 10 saniye bekle
   }
+
+  // Debug için screenshot al
+  const screenshot = await page.screenshot({ encoding: 'base64', fullPage: true });
+  console.log('---AKAKCE DEBUG SCREENSHOT BASE64---');
+  console.log(screenshot);
+  console.log('---END SCREENSHOT---');
 
   // Satıcılar ve fiyatlar (ürün detay sayfası için)
   const results = await page.evaluate(() => {
     const saticiList = Array.from(document.querySelectorAll('#PL > li'));
+    if (saticiList.length === 0) {
+      console.log('UYARI: #PL > li bulunamadı, sayfa yapısı değişmiş olabilir veya içerik yüklenmedi.');
+    }
     const satıcılar = saticiList.map((li, idx) => {
       // Fiyat
       const fiyat = li.querySelector('.pt_v8')?.innerText.replace(/\s+/g, ' ').trim() || '';
